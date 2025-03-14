@@ -7,9 +7,10 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { AnimatePresence, motion } from 'framer-motion';
+import { X } from 'lucide-react';
 
 export default function NoteEditor() {
-  const { activeNote, updateNote } = useNotesStore();
+  const { activeNote, updateNote, closeActiveNote } = useNotesStore();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
@@ -73,6 +74,16 @@ export default function NoteEditor() {
     }
   };
   
+  const handleClose = () => {
+    if (isUnsaved) {
+      if (confirm('You have unsaved changes. Save before closing?')) {
+        handleSave();
+      }
+    }
+    closeActiveNote();
+    toast.info('Note closed');
+  };
+  
   if (!activeNote) {
     return (
       <div className="flex items-center justify-center h-[calc(100vh-8rem)]">
@@ -104,6 +115,16 @@ export default function NoteEditor() {
             disabled={!isUnsaved}
           >
             {isUnsaved ? "Save" : "Saved"}
+          </Button>
+          
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={handleClose}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            <X className="h-4 w-4 mr-2" />
+            Close
           </Button>
         </div>
       </div>

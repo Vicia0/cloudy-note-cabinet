@@ -10,6 +10,7 @@ interface NotesState {
   updateNote: (id: string, updates: Partial<Omit<Note, 'id' | 'createdAt' | 'updatedAt'>>) => void;
   deleteNote: (id: string) => void;
   setActiveNote: (note: Note | null) => void;
+  closeActiveNote: () => void;
 }
 
 export const useNotesStore = create<NotesState>()(
@@ -58,6 +59,10 @@ export const useNotesStore = create<NotesState>()(
       
       setActiveNote: (note) => {
         set({ activeNote: note });
+      },
+      
+      closeActiveNote: () => {
+        set({ activeNote: null });
       },
     }),
     {
